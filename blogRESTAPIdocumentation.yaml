@@ -1,0 +1,947 @@
+openapi: 3.0.3
+info:
+  title: Blog REST APIs using Golang and SQLITE
+  description: |-
+    This is a sample Blog Server based on the OpenAPI 3.0 specification.
+  contact:
+    email: sujithsureshkumar081@gmail.com
+  version: 1.0.11
+servers:
+  - url: http://localhost:8080/api
+tags:
+  - name: author
+    description: Access to Authors
+  - name: posts
+    description: Access to Posts
+  - name: comment
+    description: Access to Comments
+  - name: tag
+    description: Access to Tags
+paths:
+  /author:
+    get:
+      tags:
+        - author
+      summary: get all Authors
+      description: get all Authors
+      operationId: getAuthor
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthorAllResponse'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/AuthorSingleResponse1'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Page not found
+        '405':
+          description: Validation exception
+    post:
+      tags:
+        - author
+      summary: Add a new Author
+      description: Add a new Author
+      operationId: addAuthor
+      requestBody:
+        description: Create a new Author
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthorRequestBody'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/AuthorRequestBody'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AuthorRequestBody'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '405':
+          description: Invalid input
+  /author/{authorId}:
+    get:
+      tags:
+        - author
+      summary: Find Author by ID
+      description: Returns a single Author
+      operationId: getAuthorById
+      parameters:
+        - name: authorId
+          in: path
+          description: ID of the Author to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthorResponse'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/AuthorResponse'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Author not found
+    put:
+      tags:
+        - author
+      summary: Updates a Author by Id
+      description: ''
+      operationId: updateAuthorByid
+      parameters:
+        - name: authorId
+          in: path
+          description: ID of author that needs to be updated
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Update the Author
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthorRequestBody'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/AuthorRequestBody'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AuthorRequestBody'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '405':
+          description: Invalid input
+    delete:
+      tags:
+        - author
+      summary: Deletes a Author by Id
+      description: Deletes a Author by id
+      operationId: deletePet
+      parameters:
+        - name: authorId
+          in: path
+          description: Author id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: Invalid value
+  /posts:
+    get:
+      tags:
+        - posts
+      summary: Get all posts
+      description: Returns all posts
+      operationId: getPosts
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostAllResponse'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/PostAllResponse'
+    post:
+      tags:
+        - posts
+      summary: Add a Post
+      description: Add a Post by a Author using Author Id
+      operationId: PostPost
+      requestBody:
+        description: Create a new Post
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Posts'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Posts'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Posts'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+  /posts/{postId}:
+    get:
+      tags:
+        - posts
+      summary: Find a post by ID
+      description: Returns a single post
+      operationId: postById
+      parameters:
+        - name: postId
+          in: path
+          description: ID of the post
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostResponse'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/PostResponse'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Page not found
+    put:
+      tags:
+        - posts
+      summary: Updates a post by id
+      description: ''
+      operationId: updatePost
+      parameters:
+        - name: postId
+          in: path
+          description: ID of the post that needs to be updated
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Create a new Post
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostsUpdate'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/PostsUpdate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Posts'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '405':
+          description: Invalid input
+    delete:
+      tags:
+        - posts
+      summary: Deletes a post by id
+      description: Delete a post by id
+      operationId: deletePostById
+      parameters:
+        - name: postId
+          in: path
+          description: Post id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: Invalid post id value
+  /comment:
+    post:
+      tags:
+        - comment
+      summary: Add a comment
+      description: Add a comment for a post
+      operationId: addTag
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Comment'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Comment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Comment'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '405':
+          description: Invalid input
+    get:
+      tags:
+        - comment
+      summary: Get all comments
+      description: Get all comments
+      operationId: getComments
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllCommentResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/AllCommentResponse'
+        '405':
+          description: Invalid input
+  /comment/{commentId}:
+    get:
+      tags:
+        - comment
+      summary: Find comment by ID
+      description: Returns a single Comment
+      operationId: getCommentById
+      parameters:
+        - name: commentId
+          in: path
+          description: ID of comment to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentResponse'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CommentResponse'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Page not found
+    put:
+      tags:
+        - comment
+      summary: Updates a comment by Id
+      description: ''
+      operationId: updateCommentById
+      parameters:
+        - name: commentId
+          in: path
+          description: ID of comment that needs to be updated
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Comment'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Comment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Comment'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '405':
+          description: Invalid input
+    delete:
+      tags:
+        - comment
+      summary: Deletes a comment by Id
+      description: delete a comment by comment id
+      operationId: deleteCommentById
+      parameters:
+        - name: commentId
+          in: path
+          description: ID of the comment that needs to be updated
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: Invalid value
+  /tag:
+    get:
+      tags:
+        - tag
+      summary: Get all Tags
+      description: Get all Tags
+      operationId: getTag
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllTagResponse'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/AllTagResponse'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Page not found
+        '405':
+          description: Validation exception
+    post:
+      tags:
+        - tag
+      summary: Add a tag
+      description: Add a tag to a particular post
+      operationId: addtag
+      requestBody:
+        description: Create a new Tag 
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Tag'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Tag'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Tag'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '405':
+          description: Invalid input
+  /tag/{tagId}:
+    get:
+      tags:
+        - tag
+      summary: Find tag by ID
+      description: Returns a single Tag
+      operationId: getTagById
+      parameters:
+        - name: tagId
+          in: path
+          description: ID of tag to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagResponse'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TagResponse'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Page not found
+    put:
+      tags:
+        - tag
+      summary: Updates a Tag by Id
+      description: ''
+      operationId: updateTag
+      parameters:
+        - name: tagId
+          in: path
+          description: ID of the tag that needs to be updated
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Create a new Tag 
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Tag'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Tag'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Tag'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '405':
+          description: Invalid input
+    delete:
+      tags:
+        - tag
+      summary: Deletes a tag by Id
+      description: delete a tag by id
+      operationId: deleteTag
+      parameters:
+        - name: tagId
+          in: path
+          description: tag id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: Invalid tag value
+components:
+  schemas:
+    AuthorRequestBody:
+      required:
+        - first_name
+        - email
+      type: object
+      properties:
+        first_name:
+          type: string
+          example: sujith
+        last_name:
+          type: string
+          example: suresh
+        email:
+          type: string
+          example: sujith@gmail.com
+      xml:
+        name: Author
+    AuthorSingleResponse1:
+      required:
+        - first_name
+        - email
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 5
+        first_name:
+          type: string
+          example: sujith
+        last_name:
+          type: string
+          example: suresh
+        email:
+          type: string
+          example: sujith@gmail.com
+      xml:
+        name: Author
+    AuthorSingleResponse2:
+      required:
+        - first_name
+        - email
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 8
+        first_name:
+          type: string
+          example: sujith
+        last_name:
+          type: string
+          example: suresh
+        email:
+          type: string
+          example: sujith@gmail.com
+      xml:
+        name: Author
+    AuthorAllResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+           type: object
+           allOf:
+            - $ref: '#/components/schemas/AuthorSingleResponse1'
+            - $ref: '#/components/schemas/AuthorSingleResponse2'
+      xml:
+        name: Author
+    AuthorResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            id:
+             type: integer
+             example: 8
+            first_name:
+             type: string
+             example: sujith
+            last_name:
+             type: string
+             example: suresh
+            email:
+             type: string
+             example: sujith@gmail.com
+      xml:
+        name: Author
+    SuccessResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Success
+    PostAllResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+           type: object
+           allOf:
+            - $ref: '#/components/schemas/SinlePostResponse'
+      xml:
+        name: Author
+    SinlePostResponse:
+      required:
+        - title
+        - description
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 7
+        title:
+          type: string
+          example: Good Morning
+        description:
+          type: string
+          example: This is the description of the post
+        author_id:
+          type: string
+          example: 9
+      xml:
+        name: Posts
+    PostResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            id:
+             type: integer
+             example: 8
+            title:
+             type: string
+             example: good morning
+            description:
+             type: string
+             example: hai very great day
+            author_id:
+             type: string
+             example: 7
+      xml:
+        name: Author
+    Posts:
+      required:
+        - title
+        - description
+      type: object
+      properties:
+        title:
+          type: string
+          example: Good Morning
+        description:
+          type: string
+          example: This is the description of the post
+        author_id:
+          type: string
+          example: 9
+        tag:
+          type: array
+          items:
+           type: string
+          example: ["kerala","village","natural"]
+      xml:
+        name: Posts
+    PostsUpdate:
+      required:
+        - title
+        - description
+      type: object
+      properties:
+        title:
+          type: string
+          example: Good Morning
+        description:
+          type: string
+          example: This is the description of the post
+        author_id:
+          type: string
+          example: 9
+      xml:
+        name: Posts
+    CommentResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            id:
+             type: integer
+             example: 8
+            comment:
+             type: string
+             example: good work
+            author_id:
+             type: string
+             example: 7
+            post_id:
+             type: string
+             example: 6
+      xml:
+        name: Author
+    AllCommentResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+           type: object
+           allOf:
+            - $ref: '#/components/schemas/SingleComment'
+      xml:
+        name: Author
+    SingleComment:
+      required:
+        - name
+        - photoUrls
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 6
+        comment:
+          type: string
+          example: super post
+        author_id:
+          type: string
+          example: 5
+        post_id:
+          type: string
+          example: 6
+      xml:
+        name: Comment
+    Comment:
+      required:
+        - name
+        - photoUrls
+      type: object
+      properties:
+        comment:
+          type: string
+          example: super post
+        author_id:
+          type: string
+          example: 5
+        post_id:
+          type: string
+          example: 6
+      xml:
+        name: Comment
+    AllTagResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+           type: object
+           allOf:
+            - $ref: '#/components/schemas/SingleTag'
+      xml:
+        name: Author
+    SingleTag:
+      required:
+        - tag
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 5
+        tag:
+          type: string
+          example: iphone
+        author_id:
+          type: string
+          example: 8
+        post_id:
+          type: string
+          example: 9
+      xml:
+        name: Tag
+    Tag:
+      required:
+        - tag
+      type: object
+      properties:
+        tag:
+          type: string
+          example: iphone
+        author_id:
+          type: string
+          example: 8
+        post_id:
+          type: string
+          example: 9
+      xml:
+        name: Tag
+    TagResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            id:
+             type: integer
+             example: 8
+            tag:
+             type: string
+             example: kerala
+            post_id:
+             type: string
+             example: 6
+            author_id:
+             type: string
+             example: 7
+      xml:
+        name: Author
+    ApiResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        type:
+          type: string
+        message:
+          type: string
+      xml:
+        name: '##default'
+  requestBodies:
+    author:
+      description: Pet object that needs to be added to the store
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AuthorRequestBody'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/AuthorRequestBody'
+    UserArray:
+      description: List of user object
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/AuthorRequestBody'
